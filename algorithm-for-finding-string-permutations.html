@@ -82,8 +82,8 @@ Sat 08 October 2016 by <a href="/author/kroche.html">kroche</a> in <a href="/cat
 
 <p>Each character in <code>aA</code> is compared to each character in <code>aB</code>. If any mismatches are detected, the strings are determined not to be permutations:</p>
 <div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">aA</span><span class="p">:</span>
- <span class="k">if</span> <span class="p">(</span><span class="n">char</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">aB</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">false</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">char</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">aB</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">false</span>
 <span class="k">return</span> <span class="n">true</span>
 </pre></div>
 
@@ -93,7 +93,7 @@ Sat 08 October 2016 by <a href="/author/kroche.html">kroche</a> in <a href="/cat
 <div class="highlight"><pre><span></span><span class="nb">sum</span> <span class="o">=</span> <span class="mi">0</span>
 
 <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">sA</span><span class="p">:</span>
- <span class="nb">sum</span> <span class="o">+=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">char</span><span class="p">)</span>
+    <span class="nb">sum</span> <span class="o">+=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">char</span><span class="p">)</span>
 </pre></div>
 
 
