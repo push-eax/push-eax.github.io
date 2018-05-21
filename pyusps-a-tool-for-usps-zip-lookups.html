@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en" itemscope itemtype="http://schema.org/Person">
+<head>
+  <meta charset="utf-8">
+  <!-- Site Meta Data -->
+  <title> kiernanro.ch  | pyusps - A tool for USPS ZIP lookups</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="kroche">
+
+  <link rel="shortcut icon" href="">
+
+  <!-- schema.org -->
+  <meta itemprop="name" content="kiernanro.ch">
+  <meta itemprop="image" content="">
+  <meta itemprop="description" content="">
+
+  <link rel="stylesheet" href="/theme/css/style.css" type="text/css" />
+  <!-- Feed Meta Data -->
+    <link href="/" type="application/atom+xml" rel="alternate" title="kiernanro.ch RSS Feed" />
+
+  <!-- Twitter Feed -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="">
+  <meta name="twitter:image" content="">
+
+</head>
+
+<body>
+    <div class="container">
+
+    <!-- Navbar -->
+      <div class="navbar">
+        <h2>kiernanro.ch</h2>
+        <ul class="static-item">
+                <li><a href="/"><h4>home</h4></a></li>
+                <li><a href="/archives.html"><h4>archives</h4></a></li>
+
+                <li><a href="/pages/about.html"><h4>about</h4></a></li>
+        </ul>        
+
+        <span>
+                    <a href="mailto:self@kiernanro.ch" target="_blank">
+                        <img src="/theme/images/icons/mail.png">
+                    </a>
+                    <a href="https://www.linkedin.com/in/kiernan-roche" target="_blank">
+                        <img src="/theme/images/icons/linkedin.png">
+                    </a>
+                    <a href="https://github.com/push-eax" target="_blank">
+                        <img src="/theme/images/icons/github.png">
+                    </a>
+                    <a href="https://pgp.mit.edu/pks/lookup?op=get&search=0x221F2D628FE93562" target="_blank">
+                        <img src="/theme/images/icons/pgp.png">
+                    </a>
+   
+            <a href="/feed/rss" rel="alternate">
+                <img src="/theme/images/icons/rss.png"></a>
+        </span>
+      </div>
+
+    <maincontent>
+<article>
+<h2>pyusps - A tool for USPS ZIP lookups</h2>
+
+<div>
+Fri 30 March 2018 by <a href="/author/kroche.html">kroche</a> in <a href="/category/programs-and-tools.html" rel="bookmark" title="permalink to Programs and Tools">Programs and Tools</a>
+    <hr>
+</div>
+
+<div>
+    <mainarticle>
+    <p>I work for the Framingham State Alumni Office. Much of my job is database management and maintenance.</p>
+<p>Today I was given a spreadsheet of 4,000 donor addresses and instructed to look up the full postal (ZIP) code for each one, and update the donor database with that information. Most of the entries already contained a five digit ZIP, but my supervisor wanted the full postal code (five digit ZIP plus four digit suffix; see <a href="https://en.wikipedia.org/wiki/ZIP_Code#ZIP+4">here</a> for more information). Since manually searching for ZIP codes is inefficient, I decided to automate it. A Python script would do.</p>
+<p>After some Googling, I realized that there were few data sources for ZIP+4 codes. Google's Maps API only exposes the first five digits, and Yahoo's relevant APIs were deprecated years ago. Since USPS invented and maintains the ZIP code system and the databases containing ZIP codes, I wondered if USPS itself had an API. If so, the script would always be able to fetch accurate data.</p>
+<p>Turns out, USPS has a <a href="https://tools.usps.com/go/ZipLookupAction!input.action">ZIP lookup tool</a>. It's very simple to fill out a form and get a full nine digit ZIP code for any US address.</p>
+<p>However, the tool doesn't respond to direct requests, such as those made by a script. Clicking the "submit" button makes an AJAX request to an API endpoint located <a href="https://tools.usps.com/tools/app/ziplookup/zipByAddress">here</a>. I opened up Firefox devtools and examined the requests my browser was making so I could replicate them in Python.</p>
+<p>The API accepts POST requests as input in the following format:</p>
+<div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;address1&quot;</span><span class="p">:</span>     <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;address2&quot;</span><span class="p">:</span>     <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;city&quot;</span><span class="p">:</span>         <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;companyName&quot;</span><span class="p">:</span>  <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;state&quot;</span><span class="p">:</span>        <span class="s2">&quot;&quot;</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p><code>address1</code>, <code>city</code>, and <code>state</code> are required parameters, while <code>address2</code> and <code>companyName</code> can be omitted. <code>state</code> is a 2-letter state code (such as MA or HI).</p>
+<p>After analyzing the API, I was ready to make my own API calls with a Python script. The script itself is very short and is purpose-built to scrape ZIP codes for an input list of addresses.</p>
+<p>The most time-consuming part of writing the script was wrangling the API. If a request doesn't contain a User-Agent header, the API won't respond. It took some trial-and-error to figure out which header(s) was causing the issue, but once I got it working the rest of the script was simple to write.</p>
+<p>The script takes input in the form of a file <code>input.txt</code> containing a newline-delimited list of addresses in the form:</p>
+<div class="highlight"><pre><span></span>123 Main Street, Somewhere, MA
+321 Some Street, Elsewhere, HI
+...
+</pre></div>
+
+
+<p>For each address, the script will look up the ZIP code, append that to the address, and write the result to a file <code>output.txt</code>.</p>
+<p>The script is on <a href="https://www.github.com/push-eax/pyusps">GitHub</a>. As always, I will accept pull requests containing fixes or new features.</p>
+    </mainarticle>
+</div>
+<hr>
+    Tags:
+            <span>None</span>
+</article>
+    </maincontent>
+  </div>
+</body>
+
+</html>
