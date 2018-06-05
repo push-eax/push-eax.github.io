@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en" itemscope itemtype="http://schema.org/Person">
+<head>
+  <meta charset="utf-8">
+  <!-- Site Meta Data -->
+  <title> kiernanro.ch  | Transition to Pelican</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="kroche">
+
+  <link rel="shortcut icon" href="">
+
+  <!-- schema.org -->
+  <meta itemprop="name" content="kiernanro.ch">
+  <meta itemprop="image" content="">
+  <meta itemprop="description" content="">
+
+  <link rel="stylesheet" href="/theme/css/style.css" type="text/css" />
+  <!-- Feed Meta Data -->
+    <link href="/" type="application/atom+xml" rel="alternate" title="kiernanro.ch RSS Feed" />
+
+  <!-- Twitter Feed -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="">
+  <meta name="twitter:image" content="">
+
+</head>
+
+<body>
+    <div class="container">
+
+    <!-- Navbar -->
+      <div class="navbar">
+        <h2>kiernanro.ch</h2>
+        <ul class="static-item">
+                <li><a href="/"><h4>home</h4></a></li>
+                <li><a href="/archives.html"><h4>archives</h4></a></li>
+
+                <li><a href="/pages/about.html"><h4>about</h4></a></li>
+        </ul>        
+
+        <span>
+                    <a href="mailto:self@kiernanro.ch" target="_blank">
+                        <img src="/theme/images/icons/mail.png">
+                    </a>
+                    <a href="https://www.linkedin.com/in/kiernan-roche" target="_blank">
+                        <img src="/theme/images/icons/linkedin.png">
+                    </a>
+                    <a href="https://github.com/push-eax" target="_blank">
+                        <img src="/theme/images/icons/github.png">
+                    </a>
+                    <a href="https://pgp.mit.edu/pks/lookup?op=get&search=0x221F2D628FE93562" target="_blank">
+                        <img src="/theme/images/icons/pgp.png">
+                    </a>
+   
+            <a href="/feed/rss" rel="alternate">
+                <img src="/theme/images/icons/rss.png"></a>
+        </span>
+      </div>
+
+    <maincontent>
+<article>
+<h2>Transition to Pelican</h2>
+
+<div>
+Wed 06 June 2018 by <a href="/author/kroche.html">kroche</a> in <a href="/category/meta.html" rel="bookmark" title="permalink to Meta">Meta</a>
+    <hr>
+</div>
+
+<div>
+    <mainarticle>
+    <p>During the spring semester, I decided to transition my site from <a href="http://picocms.org">Pico</a> to a static site generation framework, for a few reasons:</p>
+<ul>
+<li>
+<p>Reduced hosting costs. My site is now hosted on GitHub Pages, which is free. Even on my own infrastructure, I would need very little system resources to host the site.</p>
+</li>
+<li>
+<p>Reduced attack surface. PHP or other backend platforms are not needed with a statically generated site, as templates are used only at compile time, unlike CMSs where they are evaluated for each request. Without any backend logic to exploit besides the web server itself, the site is more secure. </p>
+</li>
+<li>
+<p>Faster load times and better resiliency. Even a minimal CMS like Pico has greater backend overhead than static HTML. Thanks the lack of PHP overhead, my site loads much faster, and it is much less likely to be overloaded by a sudden surge in traffic.</p>
+</li>
+</ul>
+<p>In particular, I chose <a href="https://getpelican.com">Pelican</a> as my site generator, because:</p>
+<ul>
+<li>
+<p>Pelican is written in Python, which is easily extensible and is a language I'm familiar with.</p>
+</li>
+<li>
+<p>Pelican's template engine is Jinja2, which is syntactically very similar to Twig, Pico's template engine. Transitioning from Twig to Jinja2 required only minor modifications to the site's template code.</p>
+</li>
+</ul>
+<p>As of mid-May, this transition is complete. I am very satisfied with the results. Given the recent acquisition of GitHub by Microsoft, I may seek another hosting solution depending on what Microsoft does with the platform. For the time being, GitHub Pages works fine; the other benefits of static site generation remain, in any case.</p>
+<p>The first step in the transition process was to design a new site theme. I could have used the old one, but I wanted a fresh look for the site. I took some design cues from <a href="https://git-scm.com/">the online git reference</a>, but changed some colors and fonts and designed my own flexbox-based layout.</p>
+<p>Step Two was to take the pieces of the old site templates that I wanted to hold onto and convert those from Twig to Jinja2. This was mostly painless, except for the archive code, which relied on variables outside the loop scope that were changed from within each loop iteration. Jinja2 does not allow variables to be changed from anywhere but their own scope, which means changing a variable declared outside a loop from inside a loop is not possible without some hacking. I accomplished this using garbage variables inside the loop. For example:</p>
+<div class="highlight"><pre><span></span><span class="p">{</span><span class="o">%</span> <span class="nb">set</span> <span class="n">year</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">%</span><span class="p">}</span>
+<span class="p">{</span><span class="o">%</span> <span class="k">for</span> <span class="n">article</span> <span class="ow">in</span> <span class="n">dates</span> <span class="o">%</span><span class="p">}</span>
+    <span class="p">{</span><span class="o">%</span> <span class="nb">set</span> <span class="n">year</span> <span class="o">=</span> <span class="n">article</span><span class="o">.</span><span class="n">date</span><span class="o">|</span><span class="n">date</span><span class="p">(</span><span class="s1">&#39;Y&#39;</span><span class="p">)</span> <span class="o">%</span><span class="p">}</span>
+<span class="p">{</span><span class="o">%</span> <span class="n">endfor</span> <span class="o">%</span><span class="p">}</span>
+</pre></div>
+
+
+<p>Line 3 in the above code would modify the <code>year</code> variable in Twig, but not in Jinja2 since the statement and the variable are not in the same scope. That statement and similar statements would become the following in Jinja2:</p>
+<div class="highlight"><pre><span></span><span class="p">{</span><span class="o">%</span> <span class="nb">set</span> <span class="n">year</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">%</span><span class="p">}</span>
+<span class="p">{</span><span class="o">%</span> <span class="k">for</span> <span class="n">article</span> <span class="ow">in</span> <span class="n">dates</span> <span class="o">%</span><span class="p">}</span>
+    <span class="p">{</span><span class="o">%</span> <span class="nb">set</span> <span class="n">_</span> <span class="o">=</span> <span class="n">year</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">article</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y&#39;</span><span class="p">))</span> <span class="o">%</span><span class="p">}</span>
+<span class="p">{</span><span class="o">%</span> <span class="n">endfor</span> <span class="o">%</span><span class="p">}</span>
+</pre></div>
+
+
+<p>There are some other minor differences between Twig and Jinja2, but that was the only thing that caused me any headache. I don't understand the reasoning behind that design decision, so if someone can explain to me why the Jinja2 team made it, I would be very curious to hear.</p>
+    </mainarticle>
+</div>
+<hr>
+    Tags:
+            <span>None</span>
+</article>
+    </maincontent>
+  </div>
+</body>
+
+</html>
