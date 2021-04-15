@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta name="description" content="">
+        <link rel="apple-touch-icon" sizes="180x180" href="/theme/images/favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/theme/images/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/theme/images/favicon/favicon-16x16.png">
+        <link rel="manifest" href="/theme/images/favicon/site.webmanifest">
+        <link rel="mask-icon" href="/theme/images/favicon/safari-pinned-tab.svg" color="#5bbad5">
+        <link rel="shortcut icon" href="/theme/images/favicon/favicon.ico">
+        <meta name="msapplication-TileColor" content="#da532c">
+        <meta name="msapplication-config" content="/theme/images/favicon/browserconfig.xml">
+
+
+        <title>pyusps - A tool for USPS ZIP lookups | kroche.io</title>
+
+
+            <link rel="stylesheet" href="/theme/css/style.css" type="text/css"/>
+            <link rel="stylesheet" href="/theme/css/pygments_default.css" type="text/css"/>
+
+            <script src="/theme/js/script.js"></script>
+
+</head>
+<body>
+<header>
+    <a id="home_a" href="/"><h1>Kiernan Roche</h1></a>
+    <nav>
+        <ul>
+                <li><a href="/">home</a></li>
+                <li><a href="/blog/">blog</a></li>
+                <li><a href="/about/">about</a></li>
+        </ul>
+    </nav>
+</header>    <main>
+    <fieldset class="card">
+        <legend>Blog</legend>
+        <article>
+        <h1>pyusps - A tool for USPS ZIP lookups</h1>
+        <h4>by Kiernan Roche on March 30 2018</h4>
+        <hr>
+        <p>I work for the Framingham State Alumni Office. Much of my job is database management and maintenance.</p>
+<p>Today I was given a spreadsheet of 4,000 donor addresses and instructed to look up the full postal (ZIP) code for each one, and update the donor database with that information. Most of the entries already contained a five digit ZIP, but my supervisor wanted the full postal code (five digit ZIP plus four digit suffix; see <a href="https://en.wikipedia.org/wiki/ZIP_Code#ZIP+4">here</a> for more information). Since manually searching for ZIP codes is inefficient, I decided to automate it. A Python script would do.</p>
+<p>After some Googling, I realized that there were few data sources for ZIP+4 codes. Google's Maps API only exposes the first five digits, and Yahoo's relevant APIs were deprecated years ago. Since USPS invented and maintains the ZIP code system and the databases containing ZIP codes, I wondered if USPS itself had an API. If so, the script would always be able to fetch accurate data.</p>
+<p>Turns out, USPS has a <a href="https://tools.usps.com/go/ZipLookupAction!input.action">ZIP lookup tool</a>. It's very simple to fill out a form and get a full nine digit ZIP code for any US address.</p>
+<p>However, the tool doesn't respond to direct requests, such as those made by a script. Clicking the "submit" button makes an AJAX request to an API endpoint located <a href="https://tools.usps.com/tools/app/ziplookup/zipByAddress">here</a>. I opened up Firefox devtools and examined the requests my browser was making so I could replicate them in Python.</p>
+<p>The API accepts POST requests as input in the following format:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+    <span class="nt">&quot;address1&quot;</span><span class="p">:</span>     <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;address2&quot;</span><span class="p">:</span>     <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;city&quot;</span><span class="p">:</span>         <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;companyName&quot;</span><span class="p">:</span>  <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;state&quot;</span><span class="p">:</span>        <span class="s2">&quot;&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><code>address1</code>, <code>city</code>, and <code>state</code> are required parameters, while <code>address2</code> and <code>companyName</code> can be omitted. <code>state</code> is a 2-letter state code (such as MA or HI).</p>
+<p>After analyzing the API, I was ready to make my own API calls with a Python script. The script itself is very short and is purpose-built to scrape ZIP codes for an input list of addresses.</p>
+<p>The most time-consuming part of writing the script was wrangling the API. If a request doesn't contain a User-Agent header, the API won't respond. It took some trial-and-error to figure out which header(s) was causing the issue, but once I got it working the rest of the script was simple to write.</p>
+<p>The script takes input in the form of a file <code>input.txt</code> containing a newline-delimited list of addresses in the form:</p>
+<div class="highlight"><pre><span></span><code><span class="mf">123</span> <span class="n">Main</span> <span class="n">Street</span><span class="p">,</span> <span class="n">Somewhere</span><span class="p">,</span> <span class="n">MA</span>
+<span class="mf">321</span> <span class="n">Some</span> <span class="n">Street</span><span class="p">,</span> <span class="n">Elsewhere</span><span class="p">,</span> <span class="n">HI</span>
+<span class="mf">...</span>
+</code></pre></div>
+
+<p>For each address, the script will look up the ZIP code, append that to the address, and write the result to a file <code>output.txt</code>.</p>
+<p>The script is on <a href="https://www.github.com/push-eax/pyusps">GitHub</a>. As always, I will accept pull requests containing fixes or new features.</p>
+        <h5>Category: <a href="/blog/category/software">Software</a></h5>
+        </article>
+    </fieldset>
+    </main>
+<footer>
+    <span>&#169; 2021 Kiernan Roche</span>
+    <!-- I SEE YOU! -->
+    <!-- I stole the <fieldset> layout and <span> email obfuscation trick from https://www.hdm.io. Thanks HD Moore for Metasploit and for being a cool dude. -->
+</footer></body>
+</html>

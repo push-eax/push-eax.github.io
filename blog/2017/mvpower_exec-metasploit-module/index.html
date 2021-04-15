@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta name="description" content="">
+        <link rel="apple-touch-icon" sizes="180x180" href="/theme/images/favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/theme/images/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/theme/images/favicon/favicon-16x16.png">
+        <link rel="manifest" href="/theme/images/favicon/site.webmanifest">
+        <link rel="mask-icon" href="/theme/images/favicon/safari-pinned-tab.svg" color="#5bbad5">
+        <link rel="shortcut icon" href="/theme/images/favicon/favicon.ico">
+        <meta name="msapplication-TileColor" content="#da532c">
+        <meta name="msapplication-config" content="/theme/images/favicon/browserconfig.xml">
+
+
+        <title>mvpower_exec Metasploit module | kroche.io</title>
+
+
+            <link rel="stylesheet" href="/theme/css/style.css" type="text/css"/>
+            <link rel="stylesheet" href="/theme/css/pygments_default.css" type="text/css"/>
+
+            <script src="/theme/js/script.js"></script>
+
+</head>
+<body>
+<header>
+    <a id="home_a" href="/"><h1>Kiernan Roche</h1></a>
+    <nav>
+        <ul>
+                <li><a href="/">home</a></li>
+                <li><a href="/blog/">blog</a></li>
+                <li><a href="/about/">about</a></li>
+        </ul>
+    </nav>
+</header>    <main>
+    <fieldset class="card">
+        <legend>Blog</legend>
+        <article>
+        <h1>mvpower_exec Metasploit module</h1>
+        <h4>by Kiernan Roche on February 01 2017</h4>
+        <hr>
+        <p>Pentest Partners, a UK-based security firm, <a href="https://www.pentestpartners.com/blog/pwning-cctv-cameras/">published</a> several vulnerabilites found in ARM-based MVPower brand DVRs last year, most notably an unauthenticated root shell exposed through the DVR's web interface. It appears that this is not a bug, but rather an intended feature, and that no firmware updates will be issued to disable it or allow users the option to do so.</p>
+<p>This glaring security hole is part of a larger phenomenon of poor IoT security. Backdoors such as these make DVRs and other embedded devices popular targets and create pathways into larger networks for attackers.</p>
+<p><a class="image" href="/images/mvpower_exec/shodan_query.png"><img alt="Shodan query" src="/images/mvpower_exec/shodan_query.png"></a>
+<em class="caption">A <a href="https://www.shodan.io/search?query=JAWS%2F1.0">Shodan query</a> returns over 35,000 DVRs exposing this issue.</em></p>
+<p>The shell is accessible by submitting a command in the format:</p>
+<div class="highlight"><pre><span></span><code>http://vulnerable.dvr/shell?COMMAND
+</code></pre></div>
+
+<p>Commands need to be URL encoded to be properly interpreted.</p>
+<p>The shell is non-interactive. Pentest Partners outlined this process to escalate to an interactive shell:</p>
+<ol>
+<li>Compile or script a reverse shell. Since we're dealing with devices which are usually situated behind NATs, 80 is the only exposed (forwarded) port, making bind shells unfeasible.</li>
+<li>Use wget (included in the DVR's busybox) to fetch the payload and write it to /root/rec/a1, the directory where recorded video is stored and one of the few writable locations on the filesystem.</li>
+<li>Execute the payload.</li>
+</ol>
+<p>I've written a Metasploit module (mvpower_exec) which automates the above process. Though it inherits from the Msf::Exploit::Remote class, it's not actually an exploit since it doesn't abuse a vulnerability to execute code (but I suppose that depends on whether an intended feature can be considered a vulnerability).</p>
+<p>mvpower_exec delivers and executes payloads in a single HTTP request. It has been successfully tested with all Metasploit armle payloads except meterpreter (mettle). It also supports check.</p>
+<p><a class="image" href="/images/mvpower_exec/exploit.png"><img alt="mvpower_exec in action" src="/images/mvpower_exec/exploit.png"></a>
+<em class="caption">Options and initial compromise</em></p>
+<p><a class="image" href="/images/mvpower_exec/session.png"><img alt="Interacting with session" src="/images/mvpower_exec/session.png"></a>
+<em class="caption">Interacting with the new session</em></p>
+<p>The module is available <a href="https://github.com/push-eax/mvpower_exec">here</a>.</p>
+        <h5>Category: <a href="/blog/category/programs-and-tools">Programs and Tools</a></h5>
+        </article>
+    </fieldset>
+    </main>
+<footer>
+    <span>&#169; 2021 Kiernan Roche</span>
+    <!-- I SEE YOU! -->
+    <!-- I stole the <fieldset> layout and <span> email obfuscation trick from https://www.hdm.io. Thanks HD Moore for Metasploit and for being a cool dude. -->
+</footer></body>
+</html>
