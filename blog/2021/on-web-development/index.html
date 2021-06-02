@@ -46,7 +46,7 @@
 <p>While not strictly causal, bloated web frameworks seem to go hand-in-hand with loud and annoying UX. The sites that scream and poke and beg me to sign up for their newsletter or incessantly throw advertisements in my face also seem to be the ones that load most slothfully.</p>
 <p>Part of this phenomenon is the unnecessary inclusion of heavy libraries like jQuery to accomplish things that can easily be done with a snippet of JavaScript or even pure CSS, but I suspect that one of the biggest reasons for this bloating is that, in an attempt to improve backend performance, web developers have offloaded more of the application logic and page rendering work to browsers. This shift is the result of two primary factors:</p>
 <ol>
-<li>The tradeoff of space for time that modern browsers make. RAM is plentiful nowadays, so browsers reserve more of it and use it to make browsing faster. This allows developers to keep massive amounts of data (assets) in the browser, and rely on the browser to share more of the workload. Developers take advantage of this, increasing the memory (and bandwidth and CPU) requirements of modern web apps, so browsers reserve even more memory, and the cycle continues.</li>
+<li>The tradeoff of space for time that modern browsers make. RAM is plentiful nowadays, so browsers reserve more of it and use it to make browsing faster. This allows developers to keep massive amounts of data (assets) in the browser, and rely on the browser to share more of the workload. Developers take advantage of this, increasing the memory (and network and CPU) footprint of modern web apps, so browsers reserve even more memory, and the cycle continues.</li>
 <li>As a consequence of (1), the rise in popularity of single-page apps (SPAs) and the proliferation of JavaScript frameworks used to build SPAs (Angular, React) to web things that aren't SPAs. Not only does this sap browser performance, but it also makes certain kinds of security issues (e.g. DOM-based XSS) more common.</li>
 </ol>
 <h3>Complexity creates flaws</h3>
@@ -59,7 +59,7 @@
 <h3>Don't reinvent the wheel</h3>
 <p>It's easy to make decisions about requirements for web software when browsers already have the tools necessary to perform most functions that web developers re-implement:</p>
 <ul>
-<li>Browsers have built-in search. Try it out: go to my <a href="/blog">blog archive</a>, hit Ctrl+F, and search for a blog post. Failing that, my site is also indexed by search engines, so you can do stuff like <a href="https://www.google.com/search?q=blog+post+site%3Akroche.io">this</a>. Unless I need a more powerful or flexible search function, why would I implement that again? The browser's implementation is faster than anything I could write and creates no application-level vulnerabilities or undesirable behavior.</li>
+<li>Browsers have built-in search. Try it out: go to my <a href="/blog">blog archive</a>, hit Ctrl+F,<sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup> and search for a blog post. Failing that, my site is also indexed by search engines, so you can do stuff like <a href="https://www.google.com/search?q=blog+post+site%3Akroche.io">this</a>. Unless I need a more powerful or flexible search function, why would I implement that again? The browser's implementation is faster than anything I could write and creates no application-level vulnerabilities or undesirable behavior.</li>
 <li>Browsers have <code>mailto:</code> links. Why do I need a contact form when I have a tiny link that automatically opens a user's mail client with the To and Subject fields already filled out? The biggest reason I can think of is spam, but <code>mailto:</code> links can be obfuscated and hidden behind a CAPTCHA with a little JavaScript, and unlike contact forms, they require no backend to process POST requests. On this site, I chose to use some HTML tricks to obfuscate my email address rather than JavaScript, so you, my poor reader, must copy and paste my address into your mail client, or type it. Terrible.</li>
 <li>Browsers have forward and back buttons for navigation, another thing broken by SPAs. Now we need "routers", which are JavaScript libraries that re-implement navigation, which was working perfectly well already. As usual, technological progress solves problems and creates new ones.</li>
 </ul>
@@ -80,6 +80,9 @@
 </li>
 <li id="fn:2">
 <p><a href="https://www.wireguard.com/">WireGuard</a> is a fantastic project that exemplifies this philosophy.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:3">
+<p>I recognize that this is a rather keyboard-centric position, and that searching a page is somewhat more cumbersome on mobile devices, but it's still doable and I'm lazy. Ironically, this implies that I'm offloading more of the work to the browser (or at least to users themselves), just like the developers I'm criticizing.&#160;<a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">&#8617;</a></p>
 </li>
 </ol>
 </div>
