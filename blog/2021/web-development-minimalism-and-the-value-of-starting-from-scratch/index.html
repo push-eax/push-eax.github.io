@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta name="description" content="">
+        <link rel="apple-touch-icon" sizes="180x180" href="/theme/images/favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/theme/images/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/theme/images/favicon/favicon-16x16.png">
+        <link rel="manifest" href="/theme/images/favicon/site.webmanifest">
+        <link rel="mask-icon" href="/theme/images/favicon/safari-pinned-tab.svg" color="#5bbad5">
+        <link rel="shortcut icon" href="/theme/images/favicon/favicon.ico">
+        <meta name="msapplication-TileColor" content="#da532c">
+        <meta name="msapplication-config" content="/theme/images/favicon/browserconfig.xml">
+
+
+        <title>Web development, minimalism, and the value of starting from scratch | kroche.io</title>
+
+
+            <link rel="stylesheet" href="/theme/css/style.css" type="text/css"/>
+            <link rel="stylesheet" href="/theme/css/pygments_default.css" type="text/css"/>
+
+            <script src="/theme/js/script.js"></script>
+
+</head>
+<body>
+<header>
+    <a id="home_a" href="/"><h1>Kiernan Roche</h1></a>
+    <nav>
+        <ul>
+                <li><a href="/">home</a></li>
+                <li><a href="/blog/">blog</a></li>
+                <li><a href="/about/">about</a></li>
+        </ul>
+    </nav>
+</header>    <main>
+    <fieldset class="card">
+        <legend>Blog</legend>
+        <article>
+        <h1>Web development, minimalism, and the value of starting from scratch</h1>
+        <h4>by Kiernan Roche on March 19 2021</h4>
+        <hr>
+        <p>I have a habit of building web stuff (sites, themes, applications) from scratch,<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> which takes longer than tweaking something off-the-shelf (e.g. WordPress), but allows me to better express my design philosophy. In recent years, that philosophy has converged on simplicity and minimalism. Here's why:</p>
+<h3>Starting from someone else's code means fixing problems they unknowingly create for you</h3>
+<p>When working on personal websites early on, instead of designing and implementing complex features, I would sometimes throw up my hands, copy an existing open source project (e.g. a CMS) that was close enough to what I was trying to do, and modify it to suit my needs. This practice is fairly widespread due to the growth of Q&amp;A and tutorial sites, with many programmers copying code from the web and pasting it into their project without much consideration for how the code works, or in some cases using an open source project as a base, as I did.</p>
+<p>While this is a perfectly rational thing to do in the interest of saving time, its cost is that you don't fully understand the code and all its quirks and behaviors, which is risky. Those quirks might not have been a problem for the person originally writing the code, but they may become a problem for you, because you need to modify the code to suit your requirements. Because you haven't taken the time to grok the codebase you just copied, you struggle to diagnose and properly fix any issues that arise, and development becomes an expensive game of whack-a-mole at best, or a complete rewrite at worst, which is what you were trying to avoid in the first place.</p>
+<p>Building from scratch avoids this problem by making you aware of potential issues as you build them instead of when they occur, since you understand the code you write yourself. With good design, this reduces the time cost of maintenance and feature development.</p>
+<h3>Bloat is a usability and aesthetic problem</h3>
+<p>As artfully described <a href="https://motherfuckingwebsite.com/">here</a>, modern websites are bloated. As a user, I'm just looking for information, unless I'm using a web application, in which case snappy load times and responsiveness are even more important. Megabytes of assets and JavaScript libraries that add several seconds of load time for the sake of smooth transition animations impede my search for information, which is an annoyance at best and will drive me elsewhere at worst.</p>
+<p>While not strictly causal, bloated web frameworks seem to go hand-in-hand with loud and annoying UX. The sites that scream and poke and beg me to sign up for their newsletter or incessantly throw advertisements in my face also seem to be the ones that load most slothfully.</p>
+<p>Part of this phenomenon is the unnecessary inclusion of heavy libraries like jQuery to accomplish things that can easily be done with a snippet of JavaScript or even pure CSS, but I suspect that one of the biggest reasons for this bloating is that, in an attempt to improve backend performance, web developers have offloaded more of the application logic and page rendering work to browsers. This shift is the result of two primary factors:</p>
+<ol>
+<li>The tradeoff of space for time that modern browsers make. RAM is plentiful nowadays, so browsers reserve more of it and use it to make browsing faster. This allows developers to keep massive amounts of data (assets) in the browser, and rely on the browser to share more of the workload. Developers take advantage of this, increasing the memory (and network and CPU) footprint of modern web apps, so browsers reserve even more memory, and the cycle continues.</li>
+<li>As a consequence of (1), the rise in popularity of single-page apps (SPAs) and the proliferation of JavaScript frameworks used to build SPAs (Angular, React) to web things that aren't SPAs. Not only does this sap browser performance, but it also makes certain kinds of security issues (e.g. DOM-based XSS) more common.</li>
+</ol>
+<p>Building from scratch avoids bloat by implementing and including only the features that are necessary to fulfill the requirements, avoiding the inclusion of unused library code.</p>
+<h3>Complexity creates flaws</h3>
+<p>There are good reasons to avoid the blight of bloat aside from usability and appearance. It's difficult, maybe even impossible, for human beings to fully understand the behavior of complex systems in all cases, which means that predicting misbehavior is very difficult. We can minimize this by:</p>
+<ul>
+<li>Making systems only as complex as they need to be to fulfill their requirements,<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup> and</li>
+<li>choosing those requirements carefully so as to encourage a simple implementation (do one thing, or a very small set of closely related things, and do them well).</li>
+</ul>
+<p>This site, for example, is statically generated and has no backend other than the web server itself, which eliminates any application-level vulnerabilities and improves load times dramatically. I could run this site on a CMS, but the complexity of such a solution is unnecessary if I'm not using any of the additional features, such as comments or a contact form. Conversely, I could choose to add support for comments or a contact form, but that would necessitate greater implementation complexity. Minimizing requirements makes it easy to minimize complexity, and vice versa.</p>
+<h3>Don't reinvent the wheel</h3>
+<p>It's easy to make decisions about requirements for web software when browsers already have the tools necessary to perform most functions that web developers re-implement:</p>
+<ul>
+<li>Browsers have built-in search. Try it out: go to my <a href="/blog">blog archive</a>, hit Ctrl+F,<sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup> and search for a blog post. Failing that, my site is also indexed by search engines, so you can do stuff like <a href="https://www.google.com/search?q=blog+post+site%3Akroche.io">this</a>. Unless I need a more powerful or flexible search function, why would I implement that again? The browser's implementation is faster than anything I could write and creates no application-level vulnerabilities or undesirable behavior.</li>
+<li>Browsers have <code>mailto:</code> links. Why do I need a contact form when I have a tiny link that automatically opens a user's mail client with the To and Subject fields already filled out? The biggest reason I can think of is spam, but <code>mailto:</code> links can be obfuscated and hidden behind a CAPTCHA with a little JavaScript, and unlike contact forms, they require no backend to process POST requests. On this site, I chose to use some HTML tricks to obfuscate my email address rather than JavaScript, so you, my poor reader, must copy and paste my address into your mail client, or type it. Terrible.</li>
+<li>Browsers have forward and back buttons for navigation, another thing broken by SPAs. Now we need "routers", which are JavaScript libraries that re-implement navigation, which was working perfectly well already. As usual, technological progress solves problems and creates new ones.</li>
+</ul>
+<h3>Subjectivity</h3>
+<p>Function-over-form is more than just a way to design and build websites or software. It's a way of life for me, and it informs every decision I make. Ergo, this site's minimalism has a greater purpose than pleasantness of appearance; it's an expression of my own personality, aesthetic, and artistic sensibility, which is unique to me and may not be appreciated by everyone. I'm sure there are those who, out of some strange masochism, enjoy being overwhelmed by useless and redundant things completely extraneous to the experience of searching for information.</p>
+<p>I choose to use the tools we have available to us as web developers sparingly, deliberately, and precisely. I encourage you to use them that way as well.</p>
+<p>Here are some sites I'd like to commend for their minimalism:</p>
+<ul>
+<li><a href="https://www.tarsnap.com">Tarsnap</a>, though one could argue that this is a specific design flavor (Unix-chic?) that is not completely described by the word "simple".</li>
+<li><a href="https://www.prgmr.com">prgmr</a>, which offers not only a minimalistic website but also a control panel <em>over ssh</em>.</li>
+<li>Anything by <a href="https://drewdevault.com/">Drew DeVault</a>, who talks about the bloat issue in more detail <a href="https://drewdevault.com/2018/09/04/Conservative-web-development.html">here</a>.</li>
+</ul>
+<div class="footnote">
+<hr>
+<ol>
+<li id="fn:1">
+<p>With the exception of cryptographic and other essential libraries.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p><a href="https://www.wireguard.com/">WireGuard</a> is a fantastic project that exemplifies this philosophy.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:3">
+<p>I recognize that this is a rather keyboard-centric position, and that searching a page is somewhat more cumbersome on mobile devices, but it's still doable and I'm lazy. Ironically, this implies that I'm offloading more of the work to the browser (or at least to users themselves), just like the developers I'm criticizing.&#160;<a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+        <h5>Category: <a href="/blog/categories/software">Software</a></h5>
+<h5>Tags: 
+                <a href="/blog/tags/web">#web</a>
+        </h5>
+        </article>
+    </fieldset>
+    </main>
+<footer>
+    <span>&#169; 2021 Kiernan Roche</span>
+    <!-- I SEE YOU! -->
+    <!-- I stole the <fieldset> layout and <span> email obfuscation trick from https://www.hdm.io. Thanks HD Moore for Metasploit and for being a cool dude. -->
+</footer></body>
+</html>

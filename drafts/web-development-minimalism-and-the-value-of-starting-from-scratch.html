@@ -14,7 +14,7 @@
         <meta name="msapplication-config" content="/theme/images/favicon/browserconfig.xml">
 
 
-        <title>On web development | kroche.io</title>
+        <title>Web development, minimalism, and the value of starting from scratch | kroche.io</title>
 
 
             <link rel="stylesheet" href="/theme/css/style.css" type="text/css"/>
@@ -37,10 +37,14 @@
     <fieldset class="card">
         <legend>Blog</legend>
         <article>
-        <h1>On web development</h1>
+        <h1>Web development, minimalism, and the value of starting from scratch</h1>
         <h4>by Kiernan Roche on March 19 2021</h4>
         <hr>
         <p>I have a habit of building web stuff (sites, themes, applications) from scratch,<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> which takes longer than tweaking something off-the-shelf (e.g. WordPress), but allows me to better express my design philosophy. In recent years, that philosophy has converged on simplicity and minimalism. Here's why:</p>
+<h3>Starting from someone else's code means fixing problems they unknowingly create for you</h3>
+<p>When working on personal websites early on, instead of designing and implementing complex features, I would sometimes throw up my hands, copy an existing open source project (e.g. a CMS) that was close enough to what I was trying to do, and modify it to suit my needs. This practice is fairly widespread due to the growth of Q&amp;A and tutorial sites, with many programmers copying code from the web and pasting it into their project without much consideration for how the code works, or in some cases using an open source project as a base, as I did.</p>
+<p>While this is a perfectly rational thing to do in the interest of saving time, its cost is that you don't fully understand the code and all its quirks and behaviors, which is risky. Those quirks might not have been a problem for the person originally writing the code, but they may become a problem for you, because you need to modify the code to suit your requirements. Because you haven't taken the time to grok the codebase you just copied, you struggle to diagnose and properly fix any issues that arise, and development becomes an expensive game of whack-a-mole at best, or a complete rewrite at worst, which is what you were trying to avoid in the first place.</p>
+<p>Building from scratch avoids this problem by making you aware of potential issues as you build them instead of when they occur, since you understand the code you write yourself. With good design, this reduces the time cost of maintenance and feature development.</p>
 <h3>Bloat is a usability and aesthetic problem</h3>
 <p>As artfully described <a href="https://motherfuckingwebsite.com/">here</a>, modern websites are bloated. As a user, I'm just looking for information, unless I'm using a web application, in which case snappy load times and responsiveness are even more important. Megabytes of assets and JavaScript libraries that add several seconds of load time for the sake of smooth transition animations impede my search for information, which is an annoyance at best and will drive me elsewhere at worst.</p>
 <p>While not strictly causal, bloated web frameworks seem to go hand-in-hand with loud and annoying UX. The sites that scream and poke and beg me to sign up for their newsletter or incessantly throw advertisements in my face also seem to be the ones that load most slothfully.</p>
@@ -49,6 +53,7 @@
 <li>The tradeoff of space for time that modern browsers make. RAM is plentiful nowadays, so browsers reserve more of it and use it to make browsing faster. This allows developers to keep massive amounts of data (assets) in the browser, and rely on the browser to share more of the workload. Developers take advantage of this, increasing the memory (and network and CPU) footprint of modern web apps, so browsers reserve even more memory, and the cycle continues.</li>
 <li>As a consequence of (1), the rise in popularity of single-page apps (SPAs) and the proliferation of JavaScript frameworks used to build SPAs (Angular, React) to web things that aren't SPAs. Not only does this sap browser performance, but it also makes certain kinds of security issues (e.g. DOM-based XSS) more common.</li>
 </ol>
+<p>Building from scratch avoids bloat by implementing and including only the features that are necessary to fulfill the requirements, avoiding the inclusion of unused library code.</p>
 <h3>Complexity creates flaws</h3>
 <p>There are good reasons to avoid the blight of bloat aside from usability and appearance. It's difficult, maybe even impossible, for human beings to fully understand the behavior of complex systems in all cases, which means that predicting misbehavior is very difficult. We can minimize this by:</p>
 <ul>
