@@ -46,22 +46,22 @@
 <p>Turns out, USPS has a <a href="https://tools.usps.com/go/ZipLookupAction!input.action">ZIP lookup tool</a>. It's very simple to fill out a form and get a full nine digit ZIP code for any US address.</p>
 <p>However, the tool doesn't respond to direct requests, such as those made by a script. Clicking the "submit" button makes an AJAX request to an API endpoint located <a href="https://tools.usps.com/tools/app/ziplookup/zipByAddress">here</a>. I opened up Firefox devtools and examined the requests my browser was making so I could replicate them in Python.</p>
 <p>The API accepts POST requests as input in the following format:</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;address1&quot;</span><span class="p">:</span><span class="w">     </span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;address2&quot;</span><span class="p">:</span><span class="w">     </span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;city&quot;</span><span class="p">:</span><span class="w">         </span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;companyName&quot;</span><span class="p">:</span><span class="w">  </span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;state&quot;</span><span class="p">:</span><span class="w">        </span><span class="s2">&quot;&quot;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;address1&quot;</span><span class="p">:</span><span class="w">     </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;address2&quot;</span><span class="p">:</span><span class="w">     </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;city&quot;</span><span class="p">:</span><span class="w">         </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;companyName&quot;</span><span class="p">:</span><span class="w">  </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;state&quot;</span><span class="p">:</span><span class="w">        </span><span class="s2">&quot;&quot;</span>
+<span class="p">}</span>
 </code></pre></div>
 
 <p><code>address1</code>, <code>city</code>, and <code>state</code> are required parameters, while <code>address2</code> and <code>companyName</code> can be omitted. <code>state</code> is a 2-letter state code (such as MA or HI).</p>
 <p>After analyzing the API, I was ready to make my own API calls with a Python script. The script itself is very short and is purpose-built to scrape ZIP codes for an input list of addresses.</p>
 <p>The most time-consuming part of writing the script was wrangling the API. If a request doesn't contain a User-Agent header, the API won't respond. It took some trial-and-error to figure out which header(s) was causing the issue, but once I got it working the rest of the script was simple to write.</p>
 <p>The script takes input in the form of a file <code>input.txt</code> containing a newline-delimited list of addresses in the form:</p>
-<div class="highlight"><pre><span></span><code><span class="mf">123</span><span class="w"> </span><span class="n">Main</span><span class="w"> </span><span class="n">Street</span><span class="p">,</span><span class="w"> </span><span class="n">Somewhere</span><span class="p">,</span><span class="w"> </span><span class="n">MA</span><span class="w"></span>
-<span class="mf">321</span><span class="w"> </span><span class="n">Some</span><span class="w"> </span><span class="n">Street</span><span class="p">,</span><span class="w"> </span><span class="n">Elsewhere</span><span class="p">,</span><span class="w"> </span><span class="n">HI</span><span class="w"></span>
-<span class="mf">...</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="mf">123</span><span class="w"> </span><span class="n">Main</span><span class="w"> </span><span class="n">Street</span><span class="p">,</span><span class="w"> </span><span class="n">Somewhere</span><span class="p">,</span><span class="w"> </span><span class="n">MA</span>
+<span class="mf">321</span><span class="w"> </span><span class="n">Some</span><span class="w"> </span><span class="n">Street</span><span class="p">,</span><span class="w"> </span><span class="n">Elsewhere</span><span class="p">,</span><span class="w"> </span><span class="n">HI</span>
+<span class="mf">...</span>
 </code></pre></div>
 
 <p>For each address, the script will look up the ZIP code, append that to the address, and write the result to a file <code>output.txt</code>.</p>
@@ -71,7 +71,7 @@
     </fieldset>
     </main>
 <footer>
-    <span>&#169; 2024 Kiernan Roche</span>
+    <span>&#169; 2025 Kiernan Roche</span>
     <!-- I SEE YOU! -->
     <!-- I stole the <fieldset> layout and <span> email obfuscation trick from https://www.hdm.io. Thanks HD Moore for Metasploit and for being a cool dude. -->
 </footer></body>
